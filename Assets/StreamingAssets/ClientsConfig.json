@@ -1,0 +1,62 @@
+{
+  "maxDisplayCount": 9,
+  "rectW": 1920,
+  "rectH": 1080,
+  "horizontal": true,
+  "diplay": [
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "FirePower"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "WindPower"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "IntelligentManufacturing"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "SolarPower"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "WarehouseLogistics"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "WaterPower"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "AutomobileMaking"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "CoalToMethanol"
+    },
+    {
+      "targetDisplayID": 1,
+      "path": "C://Users//Administrator//Desktop//Client//",
+      "exeName": "PlcClient.exe",
+      "eSceneNameType": "AviationOil"
+    }
+  ]
+}
