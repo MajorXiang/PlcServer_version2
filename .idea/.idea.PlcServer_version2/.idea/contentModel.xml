@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Administrator\AppData\Local\JetBrains\Rider2020.3\extResources" t="IncludeRecursive" />
+    <e p="C:\Users\Administrator\AppData\Local\JetBrains\Rider2020.3\resharper-host\Local\Transient\Rider\v203\SolutionCaches\_PlcServer_version2.-1009782287.00" t="ExcludeRecursive" />
+    <e p="G:\Unity2019.3\PlcServer_version2" t="IncludeRecursive">
+      <e p="Assembly-CSharp.csproj" t="IncludeRecursive" />
+      <e p="Assets" t="Include">
+        <e p="ModBusTCP" t="Include">
+          <e p="Test_ModBusTCP.cs" t="Include" />
+        </e>
+        <e p="Scripts" t="Include">
+          <e p="Http" t="Include">
+            <e p="HttpAttackEventUpload.cs" t="Include" />
+            <e p="HttpMgr.cs" t="Include" />
+            <e p="HttpReadTeamName.cs" t="Include" />
+            <e p="TeamDataJson.cs" t="Include" />
+          </e>
+          <e p="LogRecord.cs" t="Include" />
+          <e p="ModbsTcp" t="Include">
+            <e p="EnumDataVersionTwo.cs" t="Include" />
+            <e p="ModbusClientReadAndWrite.cs" t="Include" />
+            <e p="ModbusTcpClient.cs" t="Include" />
+            <e p="ModbusTcpClientsManager.cs" t="Include" />
+          </e>
+          <e p="RpcServer" t="Include">
+            <e p="ParseJsonData" t="Include">
+              <e p="ClientsConfigJson.cs" t="Include" />
+              <e p="ParseClientsConfigJson.cs" t="Include" />
+            </e>
+            <e p="RpcServer.cs" t="Include" />
+            <e p="ServerData" t="Include">
+              <e p="AddPortMsg.cs" t="Include" />
+              <e p="PLCMsg.cs" t="Include" />
+            </e>
+            <e p="ServerGet" t="Include">
+              <e p="ServerGetMsg.cs" t="Include" />
+              <e p="ServerSendMsg.cs" t="Include" />
+            </e>
+          </e>
+          <e p="Test.cs" t="Include" />
+          <e p="WebClient" t="Include">
+            <e p="ClientScript" t="Include">
+              <e p="EnumData.cs" t="Include" />
+              <e p="PlcKey.cs" t="Include" />
+              <e p="SceneAndThreadsData.cs" t="Include" />
+              <e p="WebClient.cs" t="Include" />
+              <e p="WebClientManage.cs" t="Include" />
+              <e p="WebClientReadAndWrite.cs" t="Include" />
+              <e p="ZTHttpTool.cs" t="Include" />
+            </e>
+            <e p="ParseXmlFormStreamingAssets" t="Include">
+              <e p="ParseXML.cs" t="Include" />
+              <e p="ParseXMLForVersionTwo.cs" t="Include" />
+            </e>
+            <e p="Tools" t="Include">
+              <e p="CalculateTools.cs" t="Include" />
+              <e p="PLCThread.cs" t="Include" />
+            </e>
+          </e>
+        </e>
+        <e p="StreamingAssets" t="Include">
+          <e p="ClientsConfig.json" t="Include" />
+          <e p="ip.txt" t="Include" />
+          <e p="isServer.txt" t="Include" />
+          <e p="savaAttackPoint.json" t="Include" />
+          <e p="WebServerIP.txt" t="Include" />
+        </e>
+      </e>
+      <e p="obj" t="ExcludeRecursive" />
+      <e p="Packages" t="ExcludeRecursive" />
+      <e p="PlcServer_version2.sln" t="IncludeFlat" />
+      <e p="Temp\bin" t="ExcludeRecursive" />
+    </e>
+  </component>
+</project>

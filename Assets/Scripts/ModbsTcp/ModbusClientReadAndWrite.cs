@@ -25,8 +25,7 @@ namespace Plc.ModbusTcp
         private bool clientWriteValue = false;
 
         private bool MatchGrmToSceneType = true;
-
-
+        
         #region Modbus_Read
         /// <summary>
         /// modbus tcp read data form server
@@ -34,7 +33,7 @@ namespace Plc.ModbusTcp
         /// <param name="_macAddress"></param>
         /// <param name="_firstAddress">startAddress</param>
         /// <param name="_length"></param>
-        private void ModbusRead(string _macAddress, string _firstAddress, string _length)
+        public void ModbusRead(string _macAddress, string _firstAddress, string _length)
         {
             //功能码 3 = read
             ushort ID = 3;
@@ -55,7 +54,7 @@ namespace Plc.ModbusTcp
                 txtsend += string.Format("{0:X2} ", aa[i]);
             }
 
-            Debug.Log("cmd type : " + ID + " StartAddress :" + StartAddress + "发送\r\n" + txtsend);
+            Debug.Log("read cmd type : " + ID +" _firstAddress : " + _firstAddress  + "发送\r\n" + txtsend);
         }
 
         void SetReadValueToUshort(string _macAddress, string _firstAddress, string length, ref ushort _MacAddress, ref ushort _StartAddress, ref ushort _Length)
@@ -72,7 +71,7 @@ namespace Plc.ModbusTcp
                 return;
             }
 
-            if (CheckLength(length, ref _Length))
+            if (!CheckLength(length, ref _Length))
             {
                 Debug.Log("目标数据长度错误！;");
                 return;
@@ -82,15 +81,15 @@ namespace Plc.ModbusTcp
 
 
         #region write
-        private void ModbusWrite(string _macAddress, string _firstAddress)
+        public void ModbusWrite(string _macAddress, string _firstAddress,string _value)
         {
-            //功能码 3 = write
+            //功能码 6 = write
             ushort ID = 6;
             ushort MacAddress = 0;
             ushort StartAddress = 0;
             byte[] dd = new byte[2];
             //将string 转换成 ushort 并且进行数据校验。
-            SetWriteValueToUshort(_macAddress, _firstAddress, ref MacAddress, ref StartAddress, ref dd);
+            SetWriteValueToUshort(_macAddress, _firstAddress,_value, ref MacAddress, ref StartAddress, ref dd);
 
             byte[] aa = new byte[12];
             MBmaster.WriteSingleRegister(ID, StartAddress, dd, MacAddress, out aa);
@@ -102,10 +101,10 @@ namespace Plc.ModbusTcp
                 txtsend += string.Format("{0:X2} ", aa[i]);
             }
 
-            Debug.Log("cmd type : " + ID + " StartAddress :" + StartAddress + "发送\r\n" + txtsend);
+            Debug.Log("write cmd type : " + ID + " StartAddress :" + StartAddress + "发送\r\n" + txtsend);
         }
 
-        void SetWriteValueToUshort(string _macAddress, string _firstAddress, ref ushort _MacAddress, ref ushort _StartAddress, ref byte[] dd)
+        void SetWriteValueToUshort(string _macAddress, string _firstAddress, string _value,ref ushort _MacAddress, ref ushort _StartAddress, ref byte[] dd)
         {
             if (!GetMacAddress(_macAddress, ref _MacAddress))
             {
@@ -118,9 +117,9 @@ namespace Plc.ModbusTcp
                 Debug.Log("请求的开始位置错误！请重新输入;");
                 return;
             }
-            string value = Convert.ToString(_StartAddress);
-            SetWriteValue(value, ref dd);
-
+            
+            // string value = Convert.ToString(_StartAddress);
+            SetWriteValue(_value, ref dd);
         }
         #endregion
 
@@ -142,7 +141,7 @@ namespace Plc.ModbusTcp
                 Debug.Log("设备地址：请输入0-255！");
                 return false;
             }
-            return false;
+            return true;
         }
 
         bool GetStartAddress(string _address, ref ushort _StartAddress)
@@ -195,10 +194,21 @@ namespace Plc.ModbusTcp
 
         void SetWriteValue( string _value, ref byte[] dd)
         {
+            string value1 = "";
+            Boolean valuevalid1;
+            _value = Convert.ToUInt16(_value).ToString();
+            formatchecking(_value, 4, out value1, out valuevalid1);
+
+            if (!valuevalid1)
+            {
+                Debug.Log("输入数值不符合规范，最多输入4位十六进制数");
+                return;
+            }
+            Debug.Log("121212121:" +_value +  " : " +  value1);
             int j = 0;
             for (int i = 0; i < 4; i = i + 2, j++)
             {
-                dd[j] = Convert.ToByte(_value.Substring(i, 2), 16);
+                dd[j] = Convert.ToByte(value1.Substring(i, 2), 16);
                 Debug.Log(dd[j].ToString());
                 Debug.Log("\r\n");
             }

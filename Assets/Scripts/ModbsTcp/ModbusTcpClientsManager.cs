@@ -1,4 +1,5 @@
-﻿using Plc.Data;
+﻿using System;
+using Plc.Data;
 using Plc.Rpc;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,30 @@ namespace Plc.ModbusTcp
             }
         }
 
+        private void Update()
+        {
+
+            if (Input.GetKeyDown(KeyCode.D))
+            {
+                SendWriteMsg();
+                SendReadMsg();
+            }
+        }
+        
+        void SendReadMsg()
+        {
+            modbusTcpClientlist[0].ModbusRead("1", "2", "1");
+        }
+
+        private int count = 0;
+        /// <summary>
+        /// to do
+        /// </summary>
+        void SendWriteMsg()
+        {
+            count++;
+            modbusTcpClientlist[0].ModbusWrite("1", "2", count.ToString());
+        }
         /// <summary>
         /// parse webserver GrmLanWeb.dat info
         /// </summary>
