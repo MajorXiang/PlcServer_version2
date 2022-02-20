@@ -195,10 +195,13 @@ namespace Plc.ModbusTcp
 
         void SetWriteValue( string _value, ref byte[] dd)
         {
+            //增加十进制转十六进制算法
+            int intValue = int.Parse(_value);
+            String strA = intValue.ToString("x8");
             int j = 0;
             for (int i = 0; i < 4; i = i + 2, j++)
             {
-                dd[j] = Convert.ToByte(_value.Substring(i, 2), 16);
+                dd[j] = Convert.ToByte(strA.Substring(i, 2), 16);
                 Debug.Log(dd[j].ToString());
                 Debug.Log("\r\n");
             }
