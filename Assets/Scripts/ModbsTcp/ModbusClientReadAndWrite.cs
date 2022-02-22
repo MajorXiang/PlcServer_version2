@@ -2,30 +2,50 @@
 using UnityEngine;
 using System;
 using Plc.Rpc;
-
+using System.Threading;
 namespace Plc.ModbusTcp
 {
     public partial class ModbusTcpClient
     {
-        public List<EnumData> enumListCache;
-        public List<EnumData> writeEnumList = new List<EnumData>();
-        private string enumInitValue = "1";
-        private string stringCache = "";
-        public bool SetEnumList = false;
-        public bool isFirstToReadData = true;
-        //request read data from webserver frequency  read time
-        private int mreadDataFrequency = 1;
         public ESceneNameType eSceneNameType = ESceneNameType.None;//作为场景类型数据从.dat文件外部读取
-        public int targetEnumCount = 0;
-        public string TeamName = "";
-        public bool InitWebServerEnumValueState = false;
-        //init web server init enum value resend request frequency
-        private int reSendWriteValueFrequency = 2;
-
-        private bool clientWriteValue = false;
-
-        private bool MatchGrmToSceneType = true;
+        private int enumValueMaxCount = 72;//plc end mac address  40072
+        private int enumValueMinCount = 0;//plc start mac address  40001
+        private string initValue = "1";
+        private string macAddress = "1";
+        private int wirteValueSleepTime = 5;
+        void ClientConnectedEvent()
+        {
+            PlcServerDataInit();
+        }
         
+        #region  Client data Init
+
+        void PlcServerDataInit()
+        {
+            for (int i = 0; i < enumValueMaxCount; i++)
+            {
+                Thread.Sleep(wirteValueSleepTime);
+                // ModbusWrite(macAddress, i.ToString(), initValue);
+                ModbusWrite(macAddress, i.ToString(), initValue);
+            }
+            //detected plc server enum value = init Value
+            PlcEnumValueMatch();
+        }
+
+        void PlcEnumValueMatch()
+        {
+            var length = enumValueMaxCount - enumValueMinCount + 1;
+            ModbusRead(macAddress, enumValueMinCount.ToString(), length.ToString(),WriteEnumDataFinsh);
+            
+        }
+
+        void WriteEnumDataFinsh(string _emumValue)
+        {
+            Debug.Log("call back info : " +  _emumValue);
+        }
+
+        #endregion
+
         #region Modbus_Read
         /// <summary>
         /// modbus tcp read data form server
@@ -33,14 +53,13 @@ namespace Plc.ModbusTcp
         /// <param name="_macAddress"></param>
         /// <param name="_firstAddress">startAddress</param>
         /// <param name="_length"></param>
-        public void ModbusRead(string _macAddress, string _firstAddress, string _length)
+        public void ModbusRead(string _macAddress, string _firstAddress, string _length ,Action<string> callback)
         {
             //功能码 3 = read
             ushort ID = 3;
             ushort MacAddress = 0;
             ushort StartAddress = 0;
             ushort Length = 0;
-
             //将string 转换成 ushort 并且进行数据校验。
             SetReadValueToUshort(_macAddress, _firstAddress, _length, ref MacAddress, ref StartAddress, ref Length);
 
@@ -53,7 +72,7 @@ namespace Plc.ModbusTcp
             {
                 txtsend += string.Format("{0:X2} ", aa[i]);
             }
-
+            callback(txtsend);
             Debug.Log("read cmd type : " + ID +" _firstAddress : " + _firstAddress  + "发送\r\n" + txtsend);
         }
 
@@ -88,8 +107,12 @@ namespace Plc.ModbusTcp
             ushort MacAddress = 0;
             ushort StartAddress = 0;
             byte[] dd = new byte[2];
+            
+            int intfirstAddress = int.Parse(_firstAddress);
+            string strA = intfirstAddress.ToString("x2");
+            
             //将string 转换成 ushort 并且进行数据校验。
-            SetWriteValueToUshort(_macAddress, _firstAddress,_value, ref MacAddress, ref StartAddress, ref dd);
+            SetWriteValueToUshort(_macAddress, strA,_value, ref MacAddress, ref StartAddress, ref dd);
 
             byte[] aa = new byte[12];
             MBmaster.WriteSingleRegister(ID, StartAddress, dd, MacAddress, out aa);
@@ -101,7 +124,7 @@ namespace Plc.ModbusTcp
                 txtsend += string.Format("{0:X2} ", aa[i]);
             }
 
-            Debug.Log("write cmd type : " + ID + " StartAddress :" + StartAddress + "发送\r\n" + txtsend);
+            // Debug.Log("write cmd type : " + ID + " StartAddress :" + StartAddress + "发送\r\n" + txtsend);
         }
 
         void SetWriteValueToUshort(string _macAddress, string _firstAddress, string _value,ref ushort _MacAddress, ref ushort _StartAddress, ref byte[] dd)
@@ -196,25 +219,23 @@ namespace Plc.ModbusTcp
         {
             int intValue = int.Parse(_value);
             string strA = intValue.ToString("x2");
-            Debug.Log("111111 " + _value  + "  : " + strA);
             string value1 = "";
             Boolean valuevalid1;
             // _value = Convert.ToUInt16(_value).ToString();
             formatchecking(strA, 4, out value1, out valuevalid1);
-
             if (!valuevalid1)
             {
                 Debug.Log("输入数值不符合规范，最多输入4位十六进制数");
                 return;
             }
-            Debug.Log("121212121:" +_value +  " : " +  value1);
             int j = 0;
             for (int i = 0; i < 4; i = i + 2, j++)
             {
                 dd[j] = Convert.ToByte(value1.Substring(i, 2), 16);
-                Debug.Log(dd[j].ToString());
-                Debug.Log("\r\n");
+                // Debug.Log(dd[j].ToString());
+                // Debug.Log("\r\n");
             }
+            // Debug.Log("11111111" + _value + " 十六进制 : " + strA);
         }
 
         /// <summary>
@@ -260,7 +281,6 @@ namespace Plc.ModbusTcp
                 stroutput = "";
             }
         }
-
         #endregion
     }
 }

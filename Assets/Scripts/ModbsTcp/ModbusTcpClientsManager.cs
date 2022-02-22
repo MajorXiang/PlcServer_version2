@@ -16,38 +16,40 @@ namespace Plc.ModbusTcp
         public List<ModbusTcpClient> modbusTcpClientlist = new List<ModbusTcpClient>();
         Thread[] threadLogins;
         int threadMaxCount = 30;
-
+        private ParsePlcEnumConfigJson parsePlcEnumConfigJson;
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
             }
+            
         }
+        
 
         private void Update()
         {
 
             if (Input.GetKeyDown(KeyCode.D))
             {
-                SendWriteMsg();
-                SendReadMsg();
+                // SendWriteMsg();
+                // SendReadMsg();
             }
         }
         
         void SendReadMsg()
         {
-            modbusTcpClientlist[0].ModbusRead("1", "2", "1");
+            // modbusTcpClientlist[0].ModbusRead("1", "2", "1");
         }
 
-        private int count = 0;
+        // private int count = 0;
         /// <summary>
         /// to do
         /// </summary>
         void SendWriteMsg()
         {
-            count++;
-            modbusTcpClientlist[0].ModbusWrite("1", "2", count.ToString());
+            // count++;
+            // modbusTcpClientlist[0].ModbusWrite("1", "2", count.ToString());
         }
         /// <summary>
         /// parse webserver GrmLanWeb.dat info
@@ -55,8 +57,10 @@ namespace Plc.ModbusTcp
         /// <param name="_xml_OBJ_STORE"></param>
         public void ParseXMLCallBack(XML_OBJ_STORE_VersionTwo _xml_OBJ_STORE)
         {
-            _xml_OBJ_STORE.DebugSelf();
-            WebClientsInit(_xml_OBJ_STORE);
+            // _xml_OBJ_STORE.DebugSelf();
+            parsePlcEnumConfigJson = new ParseClientsConfigJson().GetPlcEnumConfigJson();
+            // parsePlcEnumConfigJson.DebugSelf();
+            WebClientsInit(_xml_OBJ_STORE);//开启线程执行代码
         }
 
         public void WebClientsInit(XML_OBJ_STORE_VersionTwo _xML_OBJ_STORE_VersionTwo)

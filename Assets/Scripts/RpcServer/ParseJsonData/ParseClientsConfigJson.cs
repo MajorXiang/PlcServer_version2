@@ -8,16 +8,24 @@ namespace Plc.Rpc
 {
     public class ParseClientsConfigJson 
     {
-        private const string jsonName = "ClientsConfig";
+        private const string ClientConfigjsonName = "ClientsConfig";
+        private const string PlcEnumValueNameConfigjsonName = "PlcEnumValueData"; 
 
         public  ClientsConfigJson GetClientsConfigJson()
         {
             ClientsConfigJson clientsConfigJson;
-            string jsonPath = GetStreamingAssetsJsonPath(jsonName);
+            string jsonPath = GetStreamingAssetsJsonPath(ClientConfigjsonName);
             clientsConfigJson = ParseJson<ClientsConfigJson>(jsonPath);
             return clientsConfigJson;
         }
-
+        
+        public  ParsePlcEnumConfigJson GetPlcEnumConfigJson()
+        {
+            ParsePlcEnumConfigJson parsePlcEnumConfigJson;
+            string jsonPath = GetStreamingAssetsJsonPath(PlcEnumValueNameConfigjsonName);
+            parsePlcEnumConfigJson = ParseJson<ParsePlcEnumConfigJson>(jsonPath);
+            return parsePlcEnumConfigJson;
+        }
 
         public string GetStreamingAssetsJsonPath( string _name )
         {

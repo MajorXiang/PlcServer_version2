@@ -42,13 +42,15 @@ namespace Plc.ModbusTcp
                 MBmaster = new Master(IP, intPort);
                 MBmaster.OnResponseData += new ModbusTCP.Master.ResponseData(MBmaster_OnResponseData);
                 MBmaster.OnException += new ModbusTCP.Master.ExceptionData(MBmaster_OnException);
+                ClientConnectedEvent();
             }
             catch (SystemException error)
             {
                 Debug.Log(error.ToString());
             }
         }
-
+        
+        
         private void OnDestroy()
         {
             if (MBmaster != null)
@@ -74,7 +76,6 @@ namespace Plc.ModbusTcp
             }
             // ------------------------------------------------------------------------
             // Identify requested data
-
             switch (ID)
             {
                 case 1:
@@ -90,7 +91,8 @@ namespace Plc.ModbusTcp
                     Debug.Log("写入开关通讯正常");
                     break;
                 case 6:
-                    Debug.Log(str);
+                    // Debug.Log(str);
+                    WriteFinsh(str);
                     Debug.Log("写单路寄存器通讯正常");
                     break;
                 case 16:
@@ -100,6 +102,21 @@ namespace Plc.ModbusTcp
             }
         }
 
+        void WriteFinsh(string _str)
+        {
+            string[] b = _str.Split(' ');
+            int firstAddress = 9;
+            int writeValueIndex = 11;
+            string index = string.Format("{0:X2} ", b[firstAddress]);
+            string writeValueStr = string.Format("{0:X2} ", b[writeValueIndex]);
+            Debug.Log(  " write index value : " + index +"  write value : " + writeValueStr );
+            // TypeEventSystem.Send(new ReceiveWriteMsg()
+            // {
+            //     
+            // });
+        }
+        
+        
         // ------------------------------------------------------------------------
         // Modbus TCP slave exception
         // ------------------------------------------------------------------------

@@ -1,0 +1,389 @@
+{
+  "FirePower": [
+    {
+      "ValueName": "S1N主汽开关R",
+      "ModbusAddress": "40001",
+      "PlcValueAddress": "V634.0"
+    },
+    {
+      "ValueName": "S1N排汽开关R",
+      "ModbusAddress": "40002",
+      "PlcValueAddress": "V634.1"
+    },
+    {
+      "ValueName": "S1N汽轮机开启关闭R",
+      "ModbusAddress": "40003",
+      "PlcValueAddress": "V634.2"
+    },
+    {
+      "ValueName": "S1N给水电动调节门R",
+      "ModbusAddress": "40004",
+      "PlcValueAddress": ""
+    }
+  ],
+
+  "WindPower": [
+    {
+      "ValueName": "S2N风机1启停R",
+      "ModbusAddress": "40005",
+      "PlcValueAddress": "V634.7"
+    },
+    {
+      "ValueName": "S2N风机2启停R",
+      "ModbusAddress": "40006",
+      "PlcValueAddress": "V635.0"
+    },
+    {
+      "ValueName": "S2N风机3启停R",
+      "ModbusAddress": "40007",
+      "PlcValueAddress": "V635.1"
+    },
+    {
+      "ValueName": "S2N风机1变桨控制R",
+      "ModbusAddress": "40008",
+      "PlcValueAddress": "V635.2"
+    },
+    {
+      "ValueName": "S2N风机2变桨控制R",
+      "ModbusAddress": "40009",
+      "PlcValueAddress": "V635.3"
+    },
+    {
+      "ValueName": "S2N风机3变桨控制R",
+      "ModbusAddress": "40010",
+      "PlcValueAddress": "V635.4"
+    },
+    {
+      "ValueName": "S2N风机1传送控制R",
+      "ModbusAddress": "40011",
+      "PlcValueAddress": "V635.5"
+    },
+    {
+      "ValueName": "S2N风机2传送控制R",
+      "ModbusAddress": "40012",
+      "PlcValueAddress": "V635.6"
+    },
+    {
+      "ValueName": "S2N风机3传送控制R",
+      "ModbusAddress": "40013",
+      "PlcValueAddress": "V635.7"
+    },
+    {
+      "ValueName": "S2N风机1转矩控制R",
+      "ModbusAddress": "40014",
+      "PlcValueAddress": "V636.0"
+    },
+    {
+      "ValueName": "S2N风机2转矩控制R",
+      "ModbusAddress": "40015",
+      "PlcValueAddress": "V636.1"
+    },
+    {
+      "ValueName": "S2N风机3转矩控制R",
+      "ModbusAddress": "40016",
+      "PlcValueAddress": "V636.2"
+    }
+  ],
+
+  "SolarPower": [
+    {
+      "ValueName": "S4N过热器控制R",
+      "ModbusAddress": "40017",
+      "PlcValueAddress": "V636.3"
+    },
+    {
+      "ValueName": "S4N蒸汽发生器控制R",
+      "ModbusAddress": "40018",
+      "PlcValueAddress": "V636.4"
+    },
+    {
+      "ValueName": "S4N预热器控制R",
+      "ModbusAddress": "40019",
+      "PlcValueAddress": "V636.5"
+    },
+    {
+      "ValueName": "S4N交换器1控制R",
+      "ModbusAddress": "40020",
+      "PlcValueAddress": "V636.6"
+    },
+    {
+      "ValueName": "S4N交换器2控制R",
+      "ModbusAddress": "40021",
+      "PlcValueAddress": "V636.7"
+    },
+    {
+      "ValueName": "S4N交换器1控制R",
+      "ModbusAddress": "40022",
+      "PlcValueAddress": "V637.0"
+    },
+    {
+      "ValueName": "S4N油盐换热器控制R",
+      "ModbusAddress": "40023",
+      "PlcValueAddress": "V637.1"
+    },
+    {
+      "ValueName": "S4N集热场注泵阀R",
+      "ModbusAddress": "40024",
+      "PlcValueAddress": "V637.2"
+    },
+    {
+      "ValueName": "S4N制冷机控制R",
+      "ModbusAddress": "40025",
+      "PlcValueAddress": "V637.3"
+    },
+    {
+      "ValueName": "S4N供暖换热器控制R",
+      "ModbusAddress": "40026",
+      "PlcValueAddress": "V637.4"
+    }
+  ],
+
+  "IntelligentManufacturing": [
+    {
+      "ValueName": "S3N机床作业R",
+      "ModbusAddress": "40027",
+      "PlcValueAddress": "V637.5"
+    },
+    {
+      "ValueName": "S3N机床侧ROT作业R",
+      "ModbusAddress": "40028",
+      "PlcValueAddress": "V637.6"
+    },
+    {
+      "ValueName": "S3N打标ROT作业R",
+      "ModbusAddress": "40029",
+      "PlcValueAddress": "V637.7"
+    },
+    {
+      "ValueName": "S3N检测ROT作业R",
+      "ModbusAddress": "40030",
+      "PlcValueAddress": "V638.0"
+    },
+    {
+      "ValueName": "S3N传送带作业R",
+      "ModbusAddress": "40031",
+      "PlcValueAddress": "V638.1"
+    },
+    {
+      "ValueName": "S3N两轴装置作业R",
+      "ModbusAddress": "40032",
+      "PlcValueAddress": "V638.2"
+    },
+    {
+      "ValueName": "S3N检测装置作业R",
+      "ModbusAddress": "40033",
+      "PlcValueAddress": "V638.3"
+    },
+    {
+      "ValueName": "S3N叉车作业R",
+      "ModbusAddress": "40034",
+      "PlcValueAddress": "V638.4"
+    }
+  ],
+
+  "WarehouseLogistics": [
+    {
+      "ValueName": "S5N原料上料ROTR",
+      "ModbusAddress": "40035",
+      "PlcValueAddress": "V638.5"
+    },
+    {
+      "ValueName": "S5N生产加工一区R",
+      "ModbusAddress": "40036",
+      "PlcValueAddress": "V638.6"
+    },
+    {
+      "ValueName": "S5N生产加工二区R",
+      "ModbusAddress": "40037",
+      "PlcValueAddress": "V638.7"
+    },
+    {
+      "ValueName": "S5N智能分拣一区R",
+      "ModbusAddress": "40038",
+      "PlcValueAddress": "V639.0"
+    },
+    {
+      "ValueName": "S5N智能分拣二区R",
+      "ModbusAddress": "40039",
+      "PlcValueAddress": "V639.1"
+    },
+    {
+      "ValueName": "S5N周转区出入库对接平台R",
+      "ModbusAddress": "40040",
+      "PlcValueAddress": "V639.2"
+    },
+    {
+      "ValueName": "S5N周转箱库存区AGVR",
+      "ModbusAddress": "40041",
+      "PlcValueAddress": "V639.3"
+    },
+    {
+      "ValueName": "S5N周转箱库存区ROTR",
+      "ModbusAddress": "40042",
+      "PlcValueAddress": "V639.4"
+    },
+    {
+      "ValueName": "S5N旋转移动对接平台R",
+      "ModbusAddress": "40043",
+      "PlcValueAddress": "V639.5"
+    },
+    {
+      "ValueName": "S5N中转库R",
+      "ModbusAddress": "40044",
+      "PlcValueAddress": "V639.6"
+    },
+    {
+      "ValueName": "S5N二次包装区R",
+      "ModbusAddress": "40045",
+      "PlcValueAddress": "V639.7"
+    },
+    {
+      "ValueName": "S5N成品库R",
+      "ModbusAddress": "40046",
+      "PlcValueAddress": "V640.0"
+    }
+  ],
+
+  "AutomobileMaking": [
+    {
+      "ValueName": "S7N冲压作业R",
+      "ModbusAddress": "40047",
+      "PlcValueAddress": "V640.1"
+    },
+    {
+      "ValueName": "S7N焊接作业R",
+      "ModbusAddress": "40048",
+      "PlcValueAddress": "V640.2"
+    },
+    {
+      "ValueName": "S7N喷涂作业R",
+      "ModbusAddress": "40049",
+      "PlcValueAddress": "V640.3"
+    },
+    {
+      "ValueName": "S7N总装作业R",
+      "ModbusAddress": "40050",
+      "PlcValueAddress": "V640.4"
+    },
+    {
+      "ValueName": "S7N底盘作业R",
+      "ModbusAddress": "40051",
+      "PlcValueAddress": "V640.5"
+    },
+    {
+      "ValueName": "S7N轮胎作业R",
+      "ModbusAddress": "40052",
+      "PlcValueAddress": "V640.6"
+    },
+    {
+      "ValueName": "S7N零部件作业R",
+      "ModbusAddress": "40053",
+      "PlcValueAddress": "V640.7"
+    },
+    {
+      "ValueName": "S7N成品下线作业R",
+      "ModbusAddress": "40054",
+      "PlcValueAddress": "V641.0"
+    }
+  ],
+
+  "CoalToMethanol": [
+    {
+      "ValueName": "S8N磨煤机作业R",
+      "ModbusAddress": "40055",
+      "PlcValueAddress": "V641.1"
+    },
+    {
+      "ValueName": "S8N空气分离作业R",
+      "ModbusAddress": "40056",
+      "PlcValueAddress": "V641.2"
+    },
+    {
+      "ValueName": "S8N汽化炉作业R",
+      "ModbusAddress": "40057",
+      "PlcValueAddress": "V641.3"
+    },
+    {
+      "ValueName": "S8N洗气作业R",
+      "ModbusAddress": "40058",
+      "PlcValueAddress": "V641.4"
+    },
+    {
+      "ValueName": "S8N变换作业R",
+      "ModbusAddress": "40059",
+      "PlcValueAddress": "V641.5"
+    },
+    {
+      "ValueName": "S8N净化脱硫作业R",
+      "ModbusAddress": "40060",
+      "PlcValueAddress": "V641.6"
+    },
+    {
+      "ValueName": "S8N循环压缩机作业R",
+      "ModbusAddress": "40061",
+      "PlcValueAddress": "V641.7"
+    },
+    {
+      "ValueName": "S8N甲醇精馏作业R",
+      "ModbusAddress": "40062",
+      "PlcValueAddress": "V642.0"
+    }
+  ],
+
+  "AviationOil": [
+    {
+      "ValueName": "S9N1号泵R",
+      "ModbusAddress": "40063",
+      "PlcValueAddress": "V642.1"
+    },
+    {
+      "ValueName": "S9N2号泵R",
+      "ModbusAddress": "40064",
+      "PlcValueAddress": "V642.2"
+    },
+    {
+      "ValueName": "S9N3号泵R",
+      "ModbusAddress": "40065",
+      "PlcValueAddress": "V642.3"
+    },
+    {
+      "ValueName": "S9N1234号进油阀R",
+      "ModbusAddress": "40066",
+      "PlcValueAddress": "V642.4"
+    },
+    {
+      "ValueName": "S9N5678号出油阀R",
+      "ModbusAddress": "40067",
+      "PlcValueAddress": "V642.5"
+    },
+    {
+      "ValueName": "S9N912号进油阀R",
+      "ModbusAddress": "40068",
+      "PlcValueAddress": "V642.6"
+    },
+    {
+      "ValueName": "S9N1316号出油阀R",
+      "ModbusAddress": "40069",
+      "PlcValueAddress": "V642.7"
+    }
+  ],
+
+  "WaterPower": [
+    {
+      "ValueName": "S6N高压真空断路器控制R",
+      "ModbusAddress": "40070",
+      "PlcValueAddress": "V643.0"
+    },
+    {
+      "ValueName": "S6N投励控制R",
+      "ModbusAddress": "40071",
+      "PlcValueAddress": "V643.1"
+    },
+    {
+      "ValueName": "S6N1号机组闸门提落门控制R",
+      "ModbusAddress": "40072",
+      "PlcValueAddress": "V643.2"
+    }
+  ]
+
+}
