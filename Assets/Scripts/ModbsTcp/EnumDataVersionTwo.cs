@@ -1,5 +1,7 @@
 ﻿ using Plc.Rpc;
-namespace Plc.ModbusTcp
+ using UnityEngine;
+
+ namespace Plc.ModbusTcp
 {
     public class EnumData
     {
@@ -15,6 +17,7 @@ namespace Plc.ModbusTcp
             _str += "   enumName: " + enumName;
             _str += "   permissions: " + permissions; // "ReadOnly" :  "ReadAndWrite"
             _str += "   value: " + value;
+            Debug.Log(_str);
             return _str;
         }
     }

@@ -61,5 +61,28 @@ namespace Plc.WebServerRequest
             result = sourse.Substring(0,_index);
             return result;
         }
+        
+        public static string GetStringName(string str)
+        {
+            int firstIndex = str.IndexOf("N") +1;
+            int lastIndex = str.Length - 1;
+            if(firstIndex != -1 && firstIndex != lastIndex)
+            {
+                str = str.Substring(firstIndex, lastIndex -firstIndex);
+            }
+            return str;
+        }
+        
+        public static int GetMacAddress(string str)
+        {
+            int firstIndex = str.Length - 2;
+            if(str.Length > 2)
+            {
+                str = str.Substring(firstIndex, 2);
+            }
+
+            int value = Convert.ToInt32(str);
+            return value;
+        }
     }
 }

@@ -16,17 +16,17 @@ namespace Plc.ModbusTcp
         public List<ModbusTcpClient> modbusTcpClientlist = new List<ModbusTcpClient>();
         Thread[] threadLogins;
         int threadMaxCount = 30;
-        private ParsePlcEnumConfigJson parsePlcEnumConfigJson;
+        [HideInInspector]
+        public ParsePlcEnumConfigJson parsePlcEnumConfigJson;
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
             }
-            
+            parsePlcEnumConfigJson = new ParseClientsConfigJson().GetPlcEnumConfigJson();
         }
         
-
         private void Update()
         {
 
@@ -57,8 +57,7 @@ namespace Plc.ModbusTcp
         /// <param name="_xml_OBJ_STORE"></param>
         public void ParseXMLCallBack(XML_OBJ_STORE_VersionTwo _xml_OBJ_STORE)
         {
-            // _xml_OBJ_STORE.DebugSelf();
-            parsePlcEnumConfigJson = new ParseClientsConfigJson().GetPlcEnumConfigJson();
+            _xml_OBJ_STORE.DebugSelf();
             // parsePlcEnumConfigJson.DebugSelf();
             WebClientsInit(_xml_OBJ_STORE);//开启线程执行代码
         }

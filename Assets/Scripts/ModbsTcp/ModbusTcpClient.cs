@@ -2,7 +2,11 @@
 using UnityEngine;
 using ModbusTCP;
 using System;
+using System.Collections.Generic;
 using Plc.Data;
+using Plc.Rpc;
+using Plc.WebServerRequest;
+
 namespace Plc.ModbusTcp
 {
     public partial class ModbusTcpClient : MonoBehaviour
@@ -31,6 +35,7 @@ namespace Plc.ModbusTcp
                 Instance = this;
                 //ModbusInit();
             }
+            
         }
 
         public void ModbusConnect(object obj)
@@ -42,6 +47,7 @@ namespace Plc.ModbusTcp
                 MBmaster = new Master(IP, intPort);
                 MBmaster.OnResponseData += new ModbusTCP.Master.ResponseData(MBmaster_OnResponseData);
                 MBmaster.OnException += new ModbusTCP.Master.ExceptionData(MBmaster_OnException);
+                
                 ClientConnectedEvent();
             }
             catch (SystemException error)
@@ -49,7 +55,63 @@ namespace Plc.ModbusTcp
                 Debug.Log(error.ToString());
             }
         }
-        
+
+        #region  enumType Data Init
+
+        List<ValueItem> ParseEnumType(ParsePlcEnumConfigJson parsePlcEnumConfigJson)
+        {
+            switch (eSceneNameType)
+            {
+                case ESceneNameType.FirePower:
+                    return parsePlcEnumConfigJson.FirePower;
+                case ESceneNameType.WindPower:
+                    return parsePlcEnumConfigJson.WindPower;
+                case ESceneNameType.IntelligentManufacturing:
+                    return parsePlcEnumConfigJson.IntelligentManufacturing;
+                case ESceneNameType.SolarPower:
+                    return parsePlcEnumConfigJson.SolarPower;
+                    break;
+                case ESceneNameType.WarehouseLogistics:
+                    return parsePlcEnumConfigJson.WarehouseLogistics;
+                case ESceneNameType.WaterPower:
+                    return parsePlcEnumConfigJson.WaterPower;
+                case ESceneNameType.AutomobileMaking:
+                    return parsePlcEnumConfigJson.AutomobileMaking;
+                case ESceneNameType.CoalToMethanol:
+                    return parsePlcEnumConfigJson.CoalToMethanol;
+                case ESceneNameType.AviationOil:
+                    return parsePlcEnumConfigJson.AviationOil;
+                default:
+                    return null;
+            }
+        }
+
+        List<EnumData> ParseEnumConfigList(List<ValueItem> _list)
+        {
+            List<EnumData> _enumList = new List<EnumData>();
+            for (int i = 0; i < _list.Count; i++)
+            {
+                var _enumData = new EnumData();
+                _enumData.sceneNumber = int.Parse(CalculateTools.MidStrEx(_list[i].ValueName, "S", "N"));
+                _enumData.enumName = CalculateTools.GetStringName(_list[i].ValueName);
+                if(_list[i].ValueName.Substring(_list[i].ValueName.Length - 1, 1) == "R") 
+                {
+                    _enumData.permissions = "ReadOnly";
+                }
+                else
+                {
+                    _enumData.permissions = "ReadAndWrite";
+                }
+
+                _enumData.value = initValue;
+                _enumData.eSceneNameType = eSceneNameType;
+                _enumData.DebugSelf();
+                _enumList.Add(_enumData);
+            }
+            return _enumList;
+        }
+
+        #endregion
         
         private void OnDestroy()
         {
@@ -83,7 +145,8 @@ namespace Plc.ModbusTcp
                     Debug.Log("获取开关通讯正常");
                     break;
                 case 3:
-                    Debug.Log(str);
+                    // Debug.Log(str);
+                    ReadFinshEvent(str);
                     Debug.Log("读取寄存器通讯正常");
                     break;
                 case 5:
@@ -102,6 +165,11 @@ namespace Plc.ModbusTcp
             }
         }
 
+        void ReadFinshEvent(string _str)
+        {
+            
+        }
+
         void WriteFinsh(string _str)
         {
             string[] b = _str.Split(' ');
@@ -109,13 +177,18 @@ namespace Plc.ModbusTcp
             int writeValueIndex = 11;
             string index = string.Format("{0:X2} ", b[firstAddress]);
             string writeValueStr = string.Format("{0:X2} ", b[writeValueIndex]);
-            Debug.Log(  " write index value : " + index +"  write value : " + writeValueStr );
+            // Debug.Log(  " write index value : " + index +"  write value : " + writeValueStr );
+
+            if (!SetEnumList)
+            {
+                DetectedWriteValueInitState(index, writeValueStr);
+            }
+
             // TypeEventSystem.Send(new ReceiveWriteMsg()
             // {
             //     
             // });
         }
-        
         
         // ------------------------------------------------------------------------
         // Modbus TCP slave exception
