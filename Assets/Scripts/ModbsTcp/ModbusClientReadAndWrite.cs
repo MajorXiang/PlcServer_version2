@@ -11,11 +11,6 @@ namespace Plc.ModbusTcp
 {
     public partial class ModbusTcpClient
     {
-        
-        public List<EnumData> enumListCache;
-        public List<EnumData> writeEnumList = new List<EnumData>();
-        [HideInInspector]
-        public bool InitWebServerEnumValueState = false;
         [HideInInspector]
         public bool SetEnumList = false;
         public string TeamName = "Test";
@@ -45,23 +40,23 @@ namespace Plc.ModbusTcp
             int[] index = new int[9];
             var instance = ModbusTcpClientsManager.Instance.parsePlcEnumConfigJson;
             valueItems = new List<ValueItem>();
-            ListAddAll<ValueItem>(ref valueItems, instance.FirePower);
+            ListAddAll(ref valueItems, instance.FirePower);
             index[0] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.WindPower);
+            ListAddAll(ref valueItems, instance.WindPower);
             index[1] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.IntelligentManufacturing);
+            ListAddAll(ref valueItems, instance.IntelligentManufacturing);
             index[2] = valueItems.Count ;
-            ListAddAll<ValueItem>(ref valueItems, instance.SolarPower);
+            ListAddAll(ref valueItems, instance.SolarPower);
             index[3] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.WarehouseLogistics);
+            ListAddAll(ref valueItems, instance.WarehouseLogistics);
             index[4] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.WaterPower);
+            ListAddAll(ref valueItems, instance.WaterPower);
             index[5] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.AutomobileMaking);
+            ListAddAll(ref valueItems, instance.AutomobileMaking);
             index[6]= valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.CoalToMethanol);
+            ListAddAll(ref valueItems, instance.CoalToMethanol);
             index[7] = valueItems.Count;
-            ListAddAll<ValueItem>(ref valueItems, instance.AviationOil);
+            ListAddAll(ref valueItems, instance.AviationOil);
             index[8] = valueItems.Count;
             enumList = ParseEnumConfigList(valueItems,index);
             EnumListInit();
@@ -128,7 +123,7 @@ namespace Plc.ModbusTcp
 
         void AutoReadEnumValueFinshEvent(string _str)
         {
-            _str = GetReadStringToEndStr(_str, "03");
+            _str = GetReadStringToEndStr(_str);
             if (SetEnumList & stringCache == "")
             {
                 stringCache = _str;
@@ -139,15 +134,15 @@ namespace Plc.ModbusTcp
             }
         }
 
-        public string GetReadStringToEndStr(string sourse, string startStr)
+        public string GetReadStringToEndStr(string sourse)
         {
             string result = string.Empty;
-            int _index = 0;
-            int topLength = 5;
-            if ((sourse.Length - topLength) > 0)
+            int _index = 26;
+            // int topLength = 5;
+            if ((sourse.Length - _index) > 0)
             {
-                _index = sourse.LastIndexOf(startStr) + topLength;
                 result = sourse.Substring(_index,sourse.Length - _index);
+                Debug.Log(_index);
             }
             return result;
         }
@@ -172,8 +167,8 @@ namespace Plc.ModbusTcp
         /// <param name="_cacheStr"></param>
         void RefreshReadData(string _newStr,string _cacheStr)
         {
-            Debug.Log("false has new data to ref : " + _newStr.Length);
-            Debug.Log("false has data chache  is : " + _cacheStr.Length);
+            // Debug.Log("false has new data to ref : " + _newStr);
+            // Debug.Log("false has data chache  is : " + _cacheStr);
             string splitString = " ";
             List<string> _strArryNew = _newStr.Split(new string[] { splitString }, StringSplitOptions.None).ToList();
             _strArryNew = _strArryNew.Where(s => !string.IsNullOrEmpty(s)).ToList();
@@ -186,23 +181,22 @@ namespace Plc.ModbusTcp
                 if (!_strlistCache[i].Equals(_strArryNew[i]))
                 {
                     int index = (i + 1) / 2;
-                    Debug.Log("change pos : " + index +  "  value : " + _strArryNew[i]);
+                    int _value = Convert.ToInt32(_strArryNew[i], 16);
+                    Debug.Log("change pos : " + index +  "  value : " + _value);
                     GetSceneType(index, _strlistCache[i],_strArryNew[i]);
-                    //line 0 = OK; line 1 = count;
-                    // enumListCache[i - 2].value = _strArryNew[i];
-                    // Debug.Log("Thread Type: " + threadType.ToString() + " SceneType : " + enumListCache[i - 2].eSceneNameType.ToString() + "  has data change :" + enumListCache[i - 2].enumName + " From : " + _strlistCache[i] + " to :" + _strArryNew[i]);
-                    // MatchGrmToScene(enumListCache[i - 2].eSceneNameType, enumListCache[i - 2].enumName, _strArryNew[i],threadType.ToString(),GrmNumber);
                 }
             }
         }
 
         void GetSceneType(int _index, string _cachevalue,string _newStr)
         {
+            _cachevalue = Convert.ToInt32(_cachevalue, 16).ToString();
+            _newStr = Convert.ToInt32(_newStr, 16).ToString();
             for (int i = 0; i < enumList.Count; i++)
             {
                 if (_index == enumList[i].index)
                 {
-                    // MatchGrmToScene(enumList[i].eSceneNameType, enumList[i].enumName, _newStr, threadType.ToString(), "");
+                     MatchGrmToScene(enumList[i].eSceneNameType, enumList[i].enumName, _newStr, threadType.ToString(), "");
                      Debug.Log("Thread Type: " + threadType+ " SceneType : " + enumList[i].eSceneNameType + "  has data change :" + enumList[i].enumName + " From : " + 
                      _cachevalue + " to :" + _newStr);
                 }
