@@ -42,18 +42,28 @@ namespace Plc.ModbusTcp
 
         void DataInit()
         {
+            int[] index = new int[9];
             var instance = ModbusTcpClientsManager.Instance.parsePlcEnumConfigJson;
             valueItems = new List<ValueItem>();
             ListAddAll<ValueItem>(ref valueItems, instance.FirePower);
+            index[0] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.WindPower);
+            index[1] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.IntelligentManufacturing);
+            index[2] = valueItems.Count ;
             ListAddAll<ValueItem>(ref valueItems, instance.SolarPower);
+            index[3] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.WarehouseLogistics);
+            index[4] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.WaterPower);
+            index[5] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.AutomobileMaking);
-            ListAddAll<ValueItem>(ref valueItems, instance.AutomobileMaking);
+            index[6]= valueItems.Count;
+            ListAddAll<ValueItem>(ref valueItems, instance.CoalToMethanol);
+            index[7] = valueItems.Count;
             ListAddAll<ValueItem>(ref valueItems, instance.AviationOil);
-            enumList = ParseEnumConfigList(valueItems);
+            index[8] = valueItems.Count;
+            enumList = ParseEnumConfigList(valueItems,index);
             EnumListInit();
         }
 
@@ -61,7 +71,7 @@ namespace Plc.ModbusTcp
         {
             for (int i = 0; i < enumList.Count; i++)
             {
-                enumList[i].index = CalculateTools.GetMacAddress(valueItems[i].ModbusAddress) - 1;
+                enumList[i].index = CalculateTools.GetMacAddress(valueItems[i].ModbusAddress);
             }
         }
 

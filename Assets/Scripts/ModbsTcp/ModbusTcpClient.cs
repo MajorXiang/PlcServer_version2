@@ -86,7 +86,7 @@ namespace Plc.ModbusTcp
         //     }
         // }
 
-        List<EnumData> ParseEnumConfigList(List<ValueItem> _list)
+        List<EnumData> ParseEnumConfigList(List<ValueItem> _list, int[] _index)
         {
             List<EnumData> _enumList = new List<EnumData>();
             for (int i = 0; i < _list.Count; i++)
@@ -102,13 +102,56 @@ namespace Plc.ModbusTcp
                 {
                     _enumData.permissions = "ReadAndWrite";
                 }
-
                 _enumData.value = initValue;
-                _enumData.eSceneNameType = eSceneNameType;
+                _enumData.eSceneNameType = GetESceneType(i,_index);
                 // _enumData.DebugSelf();
                 _enumList.Add(_enumData);
             }
             return _enumList;
+        }
+
+        ESceneNameType GetESceneType(int _index, int[] _indexs)
+        {
+            if (_index < _indexs[0])
+            {
+                return ESceneNameType.FirePower;
+            }
+            else if(_index < _indexs[1])
+            {
+                return ESceneNameType.WindPower;
+            }
+            else if(_index < _indexs[2])
+            {
+                return ESceneNameType.IntelligentManufacturing;
+            }
+            else if(_index < _indexs[3])
+            {
+                return ESceneNameType.SolarPower;
+            }
+            else if(_index < _indexs[4])
+            {
+                return ESceneNameType.WarehouseLogistics;
+            }
+            else if(_index < _indexs[5])
+            {
+                return ESceneNameType.WaterPower;
+            }
+            else if(_index < _indexs[6])
+            {
+                return ESceneNameType.AutomobileMaking;
+            }
+            else if(_index < _indexs[7])
+            {
+                return ESceneNameType.CoalToMethanol;
+            }
+            else if(_index < _indexs[8])
+            {
+                return ESceneNameType.AviationOil;
+            }
+            else
+            {
+                return ESceneNameType.None;
+            }
         }
 
         #endregion
