@@ -58,33 +58,33 @@ namespace Plc.ModbusTcp
 
         #region  enumType Data Init
 
-        List<ValueItem> ParseEnumType(ParsePlcEnumConfigJson parsePlcEnumConfigJson)
-        {
-            switch (eSceneNameType)
-            {
-                case ESceneNameType.FirePower:
-                    return parsePlcEnumConfigJson.FirePower;
-                case ESceneNameType.WindPower:
-                    return parsePlcEnumConfigJson.WindPower;
-                case ESceneNameType.IntelligentManufacturing:
-                    return parsePlcEnumConfigJson.IntelligentManufacturing;
-                case ESceneNameType.SolarPower:
-                    return parsePlcEnumConfigJson.SolarPower;
-                    break;
-                case ESceneNameType.WarehouseLogistics:
-                    return parsePlcEnumConfigJson.WarehouseLogistics;
-                case ESceneNameType.WaterPower:
-                    return parsePlcEnumConfigJson.WaterPower;
-                case ESceneNameType.AutomobileMaking:
-                    return parsePlcEnumConfigJson.AutomobileMaking;
-                case ESceneNameType.CoalToMethanol:
-                    return parsePlcEnumConfigJson.CoalToMethanol;
-                case ESceneNameType.AviationOil:
-                    return parsePlcEnumConfigJson.AviationOil;
-                default:
-                    return null;
-            }
-        }
+        // List<ValueItem> ParseEnumType(ParsePlcEnumConfigJson parsePlcEnumConfigJson)
+        // {
+        //     switch (eSceneNameType)
+        //     {
+        //         case ESceneNameType.FirePower:
+        //             return parsePlcEnumConfigJson.FirePower;
+        //         case ESceneNameType.WindPower:
+        //             return parsePlcEnumConfigJson.WindPower;
+        //         case ESceneNameType.IntelligentManufacturing:
+        //             return parsePlcEnumConfigJson.IntelligentManufacturing;
+        //         case ESceneNameType.SolarPower:
+        //             return parsePlcEnumConfigJson.SolarPower;
+        //             break;
+        //         case ESceneNameType.WarehouseLogistics:
+        //             return parsePlcEnumConfigJson.WarehouseLogistics;
+        //         case ESceneNameType.WaterPower:
+        //             return parsePlcEnumConfigJson.WaterPower;
+        //         case ESceneNameType.AutomobileMaking:
+        //             return parsePlcEnumConfigJson.AutomobileMaking;
+        //         case ESceneNameType.CoalToMethanol:
+        //             return parsePlcEnumConfigJson.CoalToMethanol;
+        //         case ESceneNameType.AviationOil:
+        //             return parsePlcEnumConfigJson.AviationOil;
+        //         default:
+        //             return null;
+        //     }
+        // }
 
         List<EnumData> ParseEnumConfigList(List<ValueItem> _list)
         {
@@ -105,7 +105,7 @@ namespace Plc.ModbusTcp
 
                 _enumData.value = initValue;
                 _enumData.eSceneNameType = eSceneNameType;
-                _enumData.DebugSelf();
+                // _enumData.DebugSelf();
                 _enumList.Add(_enumData);
             }
             return _enumList;
@@ -146,7 +146,7 @@ namespace Plc.ModbusTcp
                     break;
                 case 3:
                     // Debug.Log(str);
-                    ReadFinshEvent(str);
+                    AutoReadEnumValueFinshEvent(str);
                     Debug.Log("读取寄存器通讯正常");
                     break;
                 case 5:
@@ -163,11 +163,6 @@ namespace Plc.ModbusTcp
                     Debug.Log("多路写入通讯正常");
                     break;
             }
-        }
-
-        void ReadFinshEvent(string _str)
-        {
-            
         }
 
         void WriteFinsh(string _str)

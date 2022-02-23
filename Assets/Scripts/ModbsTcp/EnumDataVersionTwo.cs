@@ -5,6 +5,7 @@
 {
     public class EnumData
     {
+        public int index;
         public int sceneNumber;
         public string enumName;
         public string permissions;
@@ -17,7 +18,7 @@
             _str += "   enumName: " + enumName;
             _str += "   permissions: " + permissions; // "ReadOnly" :  "ReadAndWrite"
             _str += "   value: " + value;
-            Debug.Log(_str);
+            // Debug.Log(_str);
             return _str;
         }
     }

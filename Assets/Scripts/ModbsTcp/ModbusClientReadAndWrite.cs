@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
 using Plc.Rpc;
 using System.Threading;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Plc.WebServerRequest;
 
 namespace Plc.ModbusTcp
@@ -13,24 +15,26 @@ namespace Plc.ModbusTcp
         public List<EnumData> enumListCache;
         public List<EnumData> writeEnumList = new List<EnumData>();
         [HideInInspector]
+        public bool InitWebServerEnumValueState = false;
+        [HideInInspector]
         public bool SetEnumList = false;
-
+        public string TeamName = "Test";
         private int enumValueInitCount = 0;
         
-        private bool EnumValueInitState = false;
-
+        private string stringCache = "";
         private List<ValueItem> valueItems ;
         private List<EnumData> enumList;
         [HideInInspector]
         public bool isFirstToReadData = true;
-        
+        private int readDataFrequency = 1;
+        private int reSendWriteValueFrequency = 2;
         public ESceneNameType eSceneNameType = ESceneNameType.None;//作为场景类型数据从.dat文件外部读取
         // private int enumValueMaxCount = 72;//plc end mac address  40072
         // private int enumValueMinCount = 0;//plc start mac address  40001
         private string initValue = "1";
         private string macAddress = "1";
-        private int wirteValueSleepTime = 5;
-        
+        private int wirteValueSleepTime = 15;
+        private bool MatchGrmToSceneType = false;//is match the scene type to send rpc msg data 
         private void Start()
         {
             DataInit();
@@ -38,9 +42,37 @@ namespace Plc.ModbusTcp
 
         void DataInit()
         {
-            valueItems = ParseEnumType(ModbusTcpClientsManager.Instance.parsePlcEnumConfigJson);
+            var instance = ModbusTcpClientsManager.Instance.parsePlcEnumConfigJson;
+            valueItems = new List<ValueItem>();
+            ListAddAll<ValueItem>(ref valueItems, instance.FirePower);
+            ListAddAll<ValueItem>(ref valueItems, instance.WindPower);
+            ListAddAll<ValueItem>(ref valueItems, instance.IntelligentManufacturing);
+            ListAddAll<ValueItem>(ref valueItems, instance.SolarPower);
+            ListAddAll<ValueItem>(ref valueItems, instance.WarehouseLogistics);
+            ListAddAll<ValueItem>(ref valueItems, instance.WaterPower);
+            ListAddAll<ValueItem>(ref valueItems, instance.AutomobileMaking);
+            ListAddAll<ValueItem>(ref valueItems, instance.AutomobileMaking);
+            ListAddAll<ValueItem>(ref valueItems, instance.AviationOil);
             enumList = ParseEnumConfigList(valueItems);
+            EnumListInit();
         }
+
+        void EnumListInit()
+        {
+            for (int i = 0; i < enumList.Count; i++)
+            {
+                enumList[i].index = CalculateTools.GetMacAddress(valueItems[i].ModbusAddress) - 1;
+            }
+        }
+
+        void ListAddAll<T>(ref List<T> _sourceList, List<T> _addList)
+        {
+            for (int i = 0; i < _addList.Count; i++)
+            {
+                _sourceList.Add(_addList[i]);
+            }
+        }
+
         void ClientConnectedEvent()
         {
             PlcServerDataInit(valueItems);
@@ -53,12 +85,10 @@ namespace Plc.ModbusTcp
             for (int i = 0; i < _valueItems.Count; i++)
             {
                 Thread.Sleep(wirteValueSleepTime);
-                firstAddress = CalculateTools.GetMacAddress(_valueItems[i].ModbusAddress);
+                firstAddress = CalculateTools.GetMacAddress(_valueItems[i].ModbusAddress) -1;
                 // Debug.Log(eSceneNameType + " : " +  firstAddress);
-                ModbusWrite(macAddress, _valueItems[i].ModbusAddress, initValue);
+                ModbusWrite(macAddress, firstAddress.ToString(), initValue);
             }
-            //detected plc server enum value = init Value
-            PlcEnumValueMatch();
         }
 
         /// <summary>
@@ -69,23 +99,139 @@ namespace Plc.ModbusTcp
         void DetectedWriteValueInitState(string _index,string _writeValueStr)
         {
             enumValueInitCount++;
-            Debug.Log(  "CMD: writeInit : index value : " + _index +"  write value : " + _writeValueStr );
+            // Debug.Log(  "CMD: writeInit : index value : " + _index +"  write value : " + _writeValueStr );
             if (enumValueInitCount >= valueItems.Count)
             {
                 SetEnumList = true;
-                Debug.Log("success to write enumvalue :" + eSceneNameType + " count : " +enumValueInitCount );
+                Debug.Log("success to write enumvalue :" + IP + " count : " +enumValueInitCount );
+                while (true)
+                {
+                    ModbusRead("1", "0", enumList.Count.ToString());
+                    Thread.Sleep(1200 * readDataFrequency);
+                }
             }
-        }
-
-        void PlcEnumValueMatch()
-        {
-            // var length = enumValueMaxCount - enumValueMinCount + 1;
-            // ModbusRead(macAddress, enumValueMinCount.ToString(), length.ToString());
         }
 
         #endregion
 
+        #region  Auto Refresh
+
+        void AutoReadEnumValueFinshEvent(string _str)
+        {
+            _str = GetReadStringToEndStr(_str, "03");
+            if (SetEnumList & stringCache == "")
+            {
+                stringCache = _str;
+            }
+            else
+            {
+                EqualsReadDataRef(_str);
+            }
+        }
+
+        public string GetReadStringToEndStr(string sourse, string startStr)
+        {
+            string result = string.Empty;
+            int _index = 0;
+            int topLength = 5;
+            if ((sourse.Length - topLength) > 0)
+            {
+                _index = sourse.LastIndexOf(startStr) + topLength;
+                result = sourse.Substring(_index,sourse.Length - _index);
+            }
+            return result;
+        }
+        
+        void EqualsReadDataRef(string _newStr)
+        {
+            if (_newStr == stringCache)
+            {
+                Debug.Log("no data to refresh!");
+            }
+            else
+            {
+                RefreshReadData(_newStr, stringCache);
+                stringCache = _newStr;
+            }
+        }
+
+        /// <summary>
+        /// Detected data refresh position
+        /// </summary>
+        /// <param name="_newStr"></param>
+        /// <param name="_cacheStr"></param>
+        void RefreshReadData(string _newStr,string _cacheStr)
+        {
+            Debug.Log("false has new data to ref : " + _newStr.Length);
+            Debug.Log("false has data chache  is : " + _cacheStr.Length);
+            string splitString = " ";
+            List<string> _strArryNew = _newStr.Split(new string[] { splitString }, StringSplitOptions.None).ToList();
+            _strArryNew = _strArryNew.Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+            List<string> _strlistCache = _cacheStr.Split(new string[] { splitString }, StringSplitOptions.None).ToList();
+            _strlistCache = _strlistCache.Where(s => !string.IsNullOrEmpty(s)).ToList();
+
+            for (int i = 0; i < _strArryNew.Count; i++)
+            {
+                if (!_strlistCache[i].Equals(_strArryNew[i]))
+                {
+                    int index = (i + 1) / 2;
+                    Debug.Log("change pos : " + index +  "  value : " + _strArryNew[i]);
+                    GetSceneType(index, _strlistCache[i],_strArryNew[i]);
+                    //line 0 = OK; line 1 = count;
+                    // enumListCache[i - 2].value = _strArryNew[i];
+                    // Debug.Log("Thread Type: " + threadType.ToString() + " SceneType : " + enumListCache[i - 2].eSceneNameType.ToString() + "  has data change :" + enumListCache[i - 2].enumName + " From : " + _strlistCache[i] + " to :" + _strArryNew[i]);
+                    // MatchGrmToScene(enumListCache[i - 2].eSceneNameType, enumListCache[i - 2].enumName, _strArryNew[i],threadType.ToString(),GrmNumber);
+                }
+            }
+        }
+
+        void GetSceneType(int _index, string _cachevalue,string _newStr)
+        {
+            for (int i = 0; i < enumList.Count; i++)
+            {
+                if (_index == enumList[i].index)
+                {
+                    // MatchGrmToScene(enumList[i].eSceneNameType, enumList[i].enumName, _newStr, threadType.ToString(), "");
+                     Debug.Log("Thread Type: " + threadType+ " SceneType : " + enumList[i].eSceneNameType + "  has data change :" + enumList[i].enumName + " From : " + 
+                     _cachevalue + " to :" + _newStr);
+                }
+            }
+        }
+        
+        /// <summary>
+        /// 是否根据grm 所属的场景进行数据分类分发
+        /// </summary>
+        /// <param name="_eSceneNameType"></param>
+        /// <param name="_enumName"></param>
+        /// <param name="_enumValue"></param>
+        /// <param name="_threadType"></param>
+        /// <param name="_grmNumber"></param>
+        void MatchGrmToScene(ESceneNameType _eSceneNameType, string _enumName, string _enumValue,string _threadType,string _grmNumber)
+        {
+            if (!MatchGrmToSceneType)
+            {
+                RpcServer.Instance.serverSendMsg.SendEnumValueChangeMsg(_eSceneNameType, _enumName, _enumValue, TeamName,_grmNumber);
+                Debug.LogError(" 不做场景匹配检测的消息转发");
+                return;
+            }
+            else
+            {
+                // Debug.LogError(" 消息场景配对： 结果为：" + _eSceneNameType.ToString().Equals(eSceneNameType.ToString()));
+                if (_eSceneNameType.ToString().Equals(eSceneNameType.ToString()))
+                {
+                    RpcServer.Instance.serverSendMsg.SendEnumValueChangeMsg(_eSceneNameType, _enumName, _enumValue, TeamName,_grmNumber);
+                }
+                else
+                {
+                    Debug.Log("No Match enumValue change Event :  SceneNameType : " + _eSceneNameType + "  enum Name : " + _enumName + "  enumValue : " + _enumValue);
+                }
+            }
+        }
+        #endregion
+        
         #region Modbus_Read
+
         /// <summary>
         /// modbus tcp read data form server
         /// </summary>
